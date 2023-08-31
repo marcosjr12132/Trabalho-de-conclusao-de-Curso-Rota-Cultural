@@ -1,0 +1,437 @@
+  
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+       .container h2 {
+            color: #001744;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 150px;
+            padding-bottom: 150px; 
+        }
+
+        .container h1 {
+            font-size: 36px;
+            color: #001744;
+        }
+
+        .container p {
+            font-size: 18px;
+            font-weight: lighter;
+            color: #888;
+            margin-bottom: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-start; 
+            margin-top: 20px;
+        }
+
+        .button-container .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #001744;
+            background-color: #E1E1E1;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 999;
+        }
+
+        .button-container .button:first-child {
+            margin-left: 85px;
+        }
+
+        .button-container .button:hover {
+            background-color: #BEC1C8;
+        }
+
+        .help-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            background-color: #001744;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .help-button:hover {
+            background-color: #9FA2A8;
+        }
+
+        .about-section {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .about-section.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .about-section p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        
+       .image-container {
+            width: 180%;
+            height: 8cm;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .registration-popup {
+            display: none;
+            text-align: center;
+            align-items: center;
+            background-color: #FFF;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            height: auto;
+            overflow: auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .registration-popup-content {
+            text-align: center;
+        }
+
+        .registration-popup-content h2 {
+            font-size: 24px;
+            color: #001744;
+        }
+
+        .registration-popup-content p {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .registration-popup-content form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .registration-popup-content input[type="text"],
+        .registration-popup-content input[type="tel"],
+        .registration-popup-content input[type="email"],
+        .registration-popup-content input[type="password"] {
+            width: 300px;
+            height: 40px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #888;
+            border-radius: 5px;
+        }
+        .registration-popup-content input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 1px solid #000;
+            border-radius: 0;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .registration-popup-content input[type="radio"]:checked {
+            background-color: blue;
+}
+
+
+        .registration-popup-content button[type="submit"] {
+            width: 200px;
+            height: 40px;
+            background-color: #001744;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .registration-popup-content button[type="submit"]:hover {
+            background-color: #9FA2A8;
+        }
+
+        .registration-popup-content p a {
+            color: #001744;
+        }
+
+        .registration-popup-content p a:hover {
+            text-decoration: underline;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color:  #001744;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        /*login*/
+        .login-popup {
+            display: none;
+            text-align: center;
+            align-items: center;
+            background-color: #FFF;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            height: auto;
+            overflow: auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-popup-content {
+            text-align: center;
+        }
+
+        .login-popup-content h2 {
+            font-size: 24px;
+            color: #001744;
+        }
+
+        .login-popup-content p {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .login-popup-content form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-popup-content input[type="email"],
+        .login-popup-content input[type="password"] {
+            width: 300px;
+            height: 40px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #888;
+            border-radius: 5px;
+        }
+
+        .login-popup-content button[type="submit"] {
+            width: 200px;
+            height: 40px;
+            background-color: #001744;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .login-popup-content button[type="submit"]:hover {
+            background-color: #9FA2A8;
+        }
+        
+        .login-popup-content p a {
+            color: #001744;
+        }
+        
+        .login-popup-content p a:hover {
+            text-decoration: underline;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color:  #001744;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        
+       .popup {
+    background-color: #FFF;
+    border-radius: 10px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    max-width: 500px;
+    text-align: justify;
+    border: 1px solid #001744;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #001744;
+}
+
+.close-button:focus {
+    outline: none;
+}
+
+.popup.show {
+    display: block;
+}
+
+.popup h2 {
+    color: #001744;
+    text-align: center;
+}
+.card {
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  display: inline-block; 
+  margin-right: 10px; 
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+
+.card h3 {
+  color: #001744; 
+  text-align: center;
+}
+.card-container {
+  display: flex;
+}
+
+   .testimonials {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .testimonial-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .testimonial {
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+    .testimonial .author {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .testimonial .content {
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    .testimonial .author-photo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover; 
+      margin-bottom: 10px;
+    }
