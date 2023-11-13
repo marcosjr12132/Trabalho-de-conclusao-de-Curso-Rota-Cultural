@@ -30,4 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo "Método de requisição inválido.";
 }
+//$baseURL: Uma constante que representa a URL base onde as imagens serão hospedadas.
+//if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagem"])): Verifica se a requisição é do tipo POST e se foi enviada uma imagem.
+//basename($_FILES["imagem"]["name"]): Obtém o nome do arquivo da imagem.
+//move_uploaded_file($_FILES["imagem"]["tmp_name"], $caminhoArquivo): Move o arquivo da imagem para a pasta de uploads.
+//$sql = "INSERT INTO imagens (nome_arquivo) VALUES ('$nomeArquivo')": Prepara uma instrução SQL para inserir o nome do arquivo no banco de dados.
 ?>
