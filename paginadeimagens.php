@@ -105,13 +105,18 @@
     <script>
         let curtida = false;
         let numeroCurtidas = 0;
-        let imagemAtual = 1;
-        const imagens = [
-            "https://ibb.co/wyJCmv1",
-            "https://ibb.co/XkMLqG0",
-            "https://ibb.co/zGtP8D4"
+        let imagemAtual = 0;
+        let imagens = [];
 
-        ];
+        function buscarImagens() {
+            fetch('buscar_imagens.php')
+                .then(response => response.json())
+                .then(data => {
+                    imagens = data.map(imagem => imagem.url);
+                    exibirImagem();
+                })
+                .catch(error => console.error('Erro ao buscar imagens:', error));
+        }
 
         function mudarImagem(direcao) {
             imagemAtual = (imagemAtual + direcao + imagens.length) % imagens.length;
@@ -120,7 +125,7 @@
 
         function exibirImagem() {
             const galeria = document.querySelector('.galeria');
-            galeria.innerHTML = `<div class="seta seta-esquerda" onclick="mudarImagem(-1)">&lt;</div><img class="imagem" src="${imagens[imagemAtual]}" alt="Imagem ${imagemAtual + 1}" /><div class="seta seta-direita" onclick="mudarImagem(1)">&gt;</div>`;
+            galeria.innerHTML = `<img class="imagem" src="${imagens[imagemAtual]}" alt="Imagem ${imagemAtual + 1}" />`;
         }
 
         function curtirFoto() {
@@ -141,6 +146,9 @@
 
         // Iniciar a troca automática de imagens a cada 5 segundos
         setInterval(() => mudarImagem(1), 5000);
+
+        // Chamar a função para buscar imagens ao carregar a página
+        buscarImagens();
     </script>
 </body>
 </html>
