@@ -1,0 +1,16 @@
+<?php
+// Nome da pasta que você deseja criar
+$pastaUploads = 'uploads';
+
+// Verifica se a pasta já existe
+if (!file_exists($pastaUploads)) {
+    // Tenta criar a pasta
+    if (mkdir($pastaUploads)) {
+        echo 'A pasta foi criada com sucesso.';
+    } else {
+        echo 'Erro ao criar a pasta.';
+    }
+} else {
+    echo 'A pasta já existe.';
+}
+?>
