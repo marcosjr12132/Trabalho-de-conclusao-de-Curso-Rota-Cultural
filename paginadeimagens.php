@@ -18,6 +18,12 @@
             text-align: center;
         }
 
+        .titulo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
         .seta {
             position: absolute;
             top: 50%;
@@ -51,10 +57,21 @@
             overflow: hidden;
         }
 
+        .imagem-container {
+            display: flex;
+            align-items: center;
+            perspective: 1200px; /* Adiciona perspectiva para criar o efeito 3D */
+        }
+
         .imagem {
             width: 800px; /* Modifique o valor da largura conforme desejado */
             height: 600px; /* Modifique o valor da altura conforme desejado */
             object-fit: cover;
+            transition: transform 1s; /* Adiciona uma transição suave */
+        }
+
+        .imagem:not(:first-child) {
+            margin-left: -50%; /* Espaçamento entre as imagens para criar o efeito 3D */
         }
 
         #curtida-btn {
@@ -84,23 +101,36 @@
         #curtidas {
             color: #000; /* Cor preta para o número de curtidas */
         }
+        .classedobotaoadicionarfoto {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        form {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="titulo">Mural de Imagens</div>
         <div class="galeria">
             <div class="seta seta-esquerda" onclick="mudarImagem(-1)">&lt;</div>
-            <img class="imagem" src="https://i.ibb.co/1RrVz5B/imagem1.jpg" alt="Imagem 1" />
+            <div class="imagem-container">
+                <img class="imagem" id="imagemAtual" alt="Imagem Atual" />
+            </div>
             <div class="seta seta-direita" onclick="mudarImagem(1)">&gt;</div>
         </div>
         <button id="curtida-btn" onclick="curtirFoto()"><span id="coracao">❤️</span><span id="curtidas">0</span></button>
-    </div>
-    <div>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        Selecione uma imagem para upload:
-        <input type="file" name="imagem" id="imagem">
-        <input type="submit" value="Enviar Imagem" name="submit"> <!-- isso aqui tem que melhorar o botao, tirar o "nenhum arquivo escolhido", tirar o "escolher arquivo" e deixar so um botao de "ADICIONAR FOTO" que vai fazer todas as funcoes anteriores automaticamente -->
-        
+       <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="imagem" id="imagem" style="display: none;" onchange="updateLabel()">
+            <label for="imagem" id="imagemLabel" style="cursor: pointer;">
+             <!--   Adicionar Imagem -->
+            </label>
+            <input type="submit" value="Adicionar foto" name="submit">
+        </form>
     </div>
     <script>
         let curtida = false;
@@ -113,19 +143,38 @@
                 .then(response => response.json())
                 .then(data => {
                     imagens = data.map(imagem => imagem.url);
-                    exibirImagem();
+                    if (imagens.length > 0) {
+                        exibirImagem();
+                        setInterval(() => mudarImagem(1), 5000);
+                    }
                 })
                 .catch(error => console.error('Erro ao buscar imagens:', error));
         }
 
         function mudarImagem(direcao) {
             imagemAtual = (imagemAtual + direcao + imagens.length) % imagens.length;
+
+            const setaEsquerda = document.querySelector('.seta-esquerda');
+            const setaDireita = document.querySelector('.seta-direita');
+
+            if (imagemAtual === 0) {
+                setaEsquerda.style.display = 'none';
+            } else {
+                setaEsquerda.style.display = 'flex';
+            }
+
+            if (imagemAtual === imagens.length - 1) {
+                setaDireita.style.display = 'none';
+            } else {
+                setaDireita.style.display = 'flex';
+            }
+
             exibirImagem();
         }
 
         function exibirImagem() {
-            const galeria = document.querySelector('.galeria');
-            galeria.innerHTML = `<img class="imagem" src="${imagens[imagemAtual]}" alt="Imagem ${imagemAtual + 1}" />`;
+            const imagemAtualElement = document.getElementById('imagemAtual');
+            imagemAtualElement.src = imagens[imagemAtual];
         }
 
         function curtirFoto() {
@@ -144,11 +193,20 @@
             document.getElementById('curtidas').innerText = numeroCurtidas;
         }
 
-        // Iniciar a troca automática de imagens a cada 5 segundos
-        setInterval(() => mudarImagem(1), 5000);
-
-        // Chamar a função para buscar imagens ao carregar a página
         buscarImagens();
+
+        function updateLabel() {
+            var input = document.getElementById('imagem');
+            var label = document.getElementById('imagemLabel');
+            var fileName = input.value.split('\\').pop(); // Extraindo o nome do arquivo
+
+            // Atualizando o rótulo apenas se um arquivo foi selecionado
+            if (fileName) {
+                label.innerHTML = 'Imagem selecionada: ' + fileName;
+            } else {
+                label.innerHTML = 'Adicionar Imagem';
+            }
+        }
     </script>
 </body>
 </html>
