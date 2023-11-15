@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria de Imagens com Botão de Curtida (Coração) e Setas</title>
+    <title>Galeria de Imagens com Botão de Curtida (Coração)</title>
     <style>
         body {
             display: flex;
@@ -24,30 +24,6 @@
             margin-bottom: 10px;
         }
 
-        .seta {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #000;
-            border: 2px solid #000;
-            border-radius: 50%;
-        }
-
-        .seta-esquerda {
-            left: 10px;
-        }
-
-        .seta-direita {
-            right: 10px;
-        }
-
         .galeria {
             display: flex;
             justify-content: center;
@@ -60,18 +36,18 @@
         .imagem-container {
             display: flex;
             align-items: center;
-            perspective: 1200px; /* Adiciona perspectiva para criar o efeito 3D */
+            perspective: 1200px;
         }
 
         .imagem {
-            width: 800px; /* Modifique o valor da largura conforme desejado */
-            height: 600px; /* Modifique o valor da altura conforme desejado */
+            width: 500px;
+            height: 300px;
             object-fit: cover;
-            transition: transform 1s; /* Adiciona uma transição suave */
+            transition: transform 1s;
         }
 
         .imagem:not(:first-child) {
-            margin-left: -50%; /* Espaçamento entre as imagens para criar o efeito 3D */
+            margin-left: -50%;
         }
 
         #curtida-btn {
@@ -85,21 +61,21 @@
             background: none;
             border: none;
             outline: none;
-            display: flex; /* Adicionado para alinhar elementos horizontalmente */
-            align-items: center; /* Adicionado para alinhar elementos verticalmente */
+            display: flex;
+            align-items: center;
         }
 
         #coracao {
             color: #ccc;
-            margin-right: 5px; /* Adicionado margem para separar o coração do número de curtidas */
+            margin-right: 5px;
         }
 
         #curtida-btn.curtido #coracao {
-            color: #e74c3c; /* Cor vermelha quando curtido */
+            color: #e74c3c;
         }
 
         #curtidas {
-            color: #000; /* Cor preta para o número de curtidas */
+            color: #000;
         }
         .classedobotaoadicionarfoto {
             min-height: 100vh;
@@ -117,11 +93,9 @@
     <div class="container">
         <div class="titulo">Mural de Imagens</div>
         <div class="galeria">
-            <div class="seta seta-esquerda" onclick="mudarImagem(-1)">&lt;</div>
             <div class="imagem-container">
                 <img class="imagem" id="imagemAtual" alt="Imagem Atual" />
             </div>
-            <div class="seta seta-direita" onclick="mudarImagem(1)">&gt;</div>
         </div>
         <button id="curtida-btn" onclick="curtirFoto()"><span id="coracao">❤️</span><span id="curtidas">0</span></button>
        <form action="upload.php" method="post" enctype="multipart/form-data">
@@ -134,9 +108,9 @@
     </div>
     <script>
         let curtida = false;
-        let numeroCurtidas = 0;
         let imagemAtual = 0;
         let imagens = [];
+        let curtidasPorImagem = {}; // Objeto para armazenar as curtidas por imagem
 
         function buscarImagens() {
             fetch('buscar_imagens.php')
@@ -154,27 +128,13 @@
         function mudarImagem(direcao) {
             imagemAtual = (imagemAtual + direcao + imagens.length) % imagens.length;
 
-            const setaEsquerda = document.querySelector('.seta-esquerda');
-            const setaDireita = document.querySelector('.seta-direita');
-
-            if (imagemAtual === 0) {
-                setaEsquerda.style.display = 'none';
-            } else {
-                setaEsquerda.style.display = 'flex';
-            }
-
-            if (imagemAtual === imagens.length - 1) {
-                setaDireita.style.display = 'none';
-            } else {
-                setaDireita.style.display = 'flex';
-            }
-
             exibirImagem();
         }
 
         function exibirImagem() {
             const imagemAtualElement = document.getElementById('imagemAtual');
             imagemAtualElement.src = imagens[imagemAtual];
+            document.getElementById('curtidas').innerText = curtidasPorImagem[imagemAtual] || 0;
         }
 
         function curtirFoto() {
@@ -182,31 +142,33 @@
 
             if (curtida) {
                 curtidaBtn.classList.remove('curtido');
-                numeroCurtidas--;
+                curtidasPorImagem[imagemAtual]--; // Reduz as curtidas para a imagem atual
             } else {
                 curtidaBtn.classList.add('curtido');
-                numeroCurtidas++;
+                if (!curtidasPorImagem[imagemAtual]) {
+                    curtidasPorImagem[imagemAtual] = 0; // Inicializa se não existir ainda
+                }
+                curtidasPorImagem[imagemAtual]++; // Aumenta as curtidas para a imagem atual
             }
 
             curtida = !curtida;
-            document.getElementById('coracao').innerText = curtida ? '❤️' : '🤍'; // Alterna entre coração vermelho e branco
-            document.getElementById('curtidas').innerText = numeroCurtidas;
+            document.getElementById('coracao').innerText = curtida ? '❤️' : '🤍';
+            document.getElementById('curtidas').innerText = curtidasPorImagem[imagemAtual] || 0;
         }
-
-        buscarImagens();
 
         function updateLabel() {
             var input = document.getElementById('imagem');
             var label = document.getElementById('imagemLabel');
-            var fileName = input.value.split('\\').pop(); // Extraindo o nome do arquivo
+            var fileName = input.value.split('\\').pop();
 
-            // Atualizando o rótulo apenas se um arquivo foi selecionado
             if (fileName) {
                 label.innerHTML = 'Imagem selecionada: ' + fileName;
             } else {
                 label.innerHTML = 'Adicionar Imagem';
             }
         }
+
+        buscarImagens();
     </script>
 </body>
 </html>
