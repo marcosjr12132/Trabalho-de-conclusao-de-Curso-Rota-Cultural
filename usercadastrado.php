@@ -1,95 +1,234 @@
-<?php
+<!DOCTYPE html>
+<html lang="pt">
 
-include('protect.php');
-
-?>
-<html>
 <head>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesta Cultural</title>
+    <style>
+        p {
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #FFB535;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #f5f5f5;
+            margin: 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #BB7804;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        main h2 {
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .cta-buttons a {
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-buttons a.calendario {
+            background-color: #3498db; /* Cor do botão de calendário */
+        }
+
+        .cta-buttons a.perfil {
+            background-color: #e74c3c; /* Cor do botão de perfil */
+        }
+
+        .cta-buttons a:hover {
+            background-color: #485460;
+        }
+
+        footer {
+            background-color: #FFB535;
+            color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            /* Optional: Add border-radius for rounded corners */
+            margin-top: 20px;
+            /* Adjust the margin as needed */
+        }
+
+        .main-button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 25px;
+            background-color: #E40060; /* Cor do botão de inscrições */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .main-button:hover {
+            background-color: #AF024B; /* Cor no hover similar ao botão de inscrições */
+        }
+
+        button.close-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #FFA813;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button.close-button:hover {
+            background-color: #BB7804;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .login-popup,
+        .registration-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        .close-popup-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-        <p>
-        <a href="logout.php">Sair</a>
-        </p>
-    <div class="icon-container">
-        <i class="material-icons md-48" data-href="perfil.php">face</i>
-        <i class="material-icons" id="theme-toggle">nightlight_round</i>
-        <span class="material-icons" data-href="calendario.php">calendar_today</span>
-    </div>
-
-<div>
-  <span class="material-icons help-button" onclick="openPopup()">help</span>
-  <div class="popup" id="popup" style="display: none;">
-    <div class="popup-content">
-      <button class="close-button" onclick="closePopup()">&#x2716;</button>
-      <h2>Bem-vindo ao Rota Cultural</h2>
-      <p>O seu portal de referência para a organização de eventos culturais nas escolas. Aqui, você encontrará recursos e ferramentas para planejar e realizar eventos culturais nas escolas, incluindo apresentações de teatro, concertos, exposições de arte e muito mais. Estamos empenhados em tornar a experiência cultural nas escolas mais acessível e inspiradora para todos os envolvidos. Juntos, podemos trazer a magia da cultura para as escolas e enriquecer a jornada educacional dos estudantes.</p>
-    </div>
-  </div>
-</div>
-
-    
-    </div>
-        <h1>Bem-vindo ao Rota Cultural</h1>
-        <p>Descubra novos horizontes artísticos com a Rota Cultural: o programa escolar que leva você a uma viagem pelo conhecimento.</p>
+    <header>
+        <h1>Cesta Cultural</h1>
+        <nav>
+            
+            <ul>
+                <li><a href="#" onclick="showPopup()">Sobre</a></li>
+                <li><a href="paginadeimagens.php">Mural</a></li>
+                <li><a href="calendario/index.php">Calendário</a></li>
+                <li><a href="perfil.php">Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <p>Descubra novos horizontes e experiências, participe de um evento da Cesta Cultural!</p>
         <div class="image-container">
-            <img src="https://static5.vvale.com.br/wp-content/uploads/2017/03/DSC09145.jpg" alt="Imagem">
+            <img src="img1.jpeg" alt="Horizontal Image">
         </div>
-        <h2>Próximos eventos</h2>
-</div>
-  <div class="card">
-    <h3>Evento 1</h3>
-    <p>Data: 15 de junho de 2023</p>
-    <p>Descrição: Descrição do Evento 1.</p>
-  </div>
-  
-  <div class="card">
-    <h3>Evento 2</h3>
-    <p>Data: 22 de junho de 2023</p>
-    <p>Descrição: Descrição do Evento 2.</p>
-  </div>
-  
-   <section class="testimonials">
-    <h2>Depoimentos</h2>
-    <div class="testimonial-container">
-      <div class="testimonial">
-        <img class="author-photo" src="caminho/para/foto1.jpg" alt="Foto do João Silva">
-        <div>
-          <div class="author">João Silva</div>
-          <div class="content">Participei de um evento incrível! A organização foi impecável e os palestrantes eram muito qualificados. Aprendi muito e com certeza participarei de outros eventos organizados por vocês.</div>
-        </div>
-      </div>
-
-      <div class="testimonial">
-        <img class="author-photo" src="caminho/para/foto2.jpg" alt="Foto da Maria Santos">
-        <div>
-          <div class="author">Maria Santos</div>
-          <div class="content">Utilizo o site há algum tempo e estou muito satisfeita. É fácil de navegar e sempre encontro as informações que preciso. Parabéns pela plataforma!</div>
-        </div>
-      </div>
-
-      <div class="testimonial">
-        <img class="author-photo" src="caminho/para/foto3.jpg" alt="Foto do Carlos Oliveira">
-        <div>
-          <div class="author">Carlos Oliveira</div>
-          <div class="content">Recomendo fortemente o site para todos que buscam eventos de qualidade. Já participei de vários e todos superaram minhas expectativas. Continuem com o ótimo trabalho!</div>
-        </div>
-      </div>
-
-      <div class="testimonial">
-        <img class="author-photo" src="caminho/para/foto4.jpg" alt="Foto da Ana Souza">
-        <div>
-          <div class="author">Ana Souza</div>
-          <div class="content">Adoro participar dos eventos organizados por vocês. Sempre são inspiradores e me permitem ampliar meu networking. Estou ansiosa para o próximo!</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-    
-	<footer>
-		<p>&copy; 2023 Rota Cultural </p> <!-- nome criação e selo do site -->
-	</footer>
+        <a href="inscricoes.html" class="main-button">Participe Agora</a>
+        <a href="paginadeimagens.php" class="main-button">Ver Todas as Imagens</a>
+    </main>
+    <footer>
+    <footer>
+        <p>&copy; 2022 - Cesta Cultural. Todos os direitos reservados.</p>
+    </footer>
 </body>
+
 </html>
+
