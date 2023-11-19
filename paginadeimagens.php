@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria de Imagens com Botão de Curtida (Coração)</title>
+    <title>Galeria de Imagens</title>
     <style>
         body {
             display: flex;
@@ -50,33 +50,6 @@
             margin-left: -50%;
         }
 
-        #curtida-btn {
-            position: absolute;
-            bottom: 1px;
-            right: 1%;
-            transform: translateX(-50%);
-            cursor: pointer;
-            font-size: 24px;
-            color: #ccc;
-            background: none;
-            border: none;
-            outline: none;
-            display: flex;
-            align-items: center;
-        }
-
-        #coracao {
-            color: #ccc;
-            margin-right: 5px;
-        }
-
-        #curtida-btn.curtido #coracao {
-            color: #e74c3c;
-        }
-
-        #curtidas {
-            color: #000;
-        }
         .classedobotaoadicionarfoto {
             min-height: 100vh;
             display: flex;
@@ -84,6 +57,7 @@
             align-items: center;
             justify-content: center;
         }
+
         form {
             margin-top: 20px;
         }
@@ -97,20 +71,19 @@
                 <img class="imagem" id="imagemAtual" alt="Imagem Atual" />
             </div>
         </div>
-        <button id="curtida-btn" onclick="curtirFoto()"><span id="coracao">❤️</span><span id="curtidas">0</span></button>
-       <form action="upload.php" method="post" enctype="multipart/form-data">
-            <input type="file" name="imagem" id="imagem" style="display: none;" onchange="updateLabel()">
-            <label for="imagem" id="imagemLabel" style="cursor: pointer;">
-             <!--   Adicionar Imagem -->
-            </label>
-            <input type="submit" value="Adicionar foto" name="submit">
-        </form>
+        <form action="processar_upload.php" method="post" enctype="multipart/form-data">
+        <label for="imagem">Selecione uma imagem:</label>
+        <input type="file" name="imagem" id="imagem" accept="image/*">
+        <!--<br>
+        <label for="descricao">Descrição:</label>
+        <textarea name="descricao" id="descricao" rows="4"></textarea>
+        <br> -->
+        <input type="submit" value="Enviar">
+    </form>
     </div>
     <script>
-        let curtida = false;
         let imagemAtual = 0;
         let imagens = [];
-        let curtidasPorImagem = {}; // Objeto para armazenar as curtidas por imagem
 
         function buscarImagens() {
             fetch('buscar_imagens.php')
@@ -127,33 +100,12 @@
 
         function mudarImagem(direcao) {
             imagemAtual = (imagemAtual + direcao + imagens.length) % imagens.length;
-
             exibirImagem();
         }
 
         function exibirImagem() {
             const imagemAtualElement = document.getElementById('imagemAtual');
             imagemAtualElement.src = imagens[imagemAtual];
-            document.getElementById('curtidas').innerText = curtidasPorImagem[imagemAtual] || 0;
-        }
-
-        function curtirFoto() {
-            const curtidaBtn = document.getElementById('curtida-btn');
-
-            if (curtida) {
-                curtidaBtn.classList.remove('curtido');
-                curtidasPorImagem[imagemAtual]--; // Reduz as curtidas para a imagem atual
-            } else {
-                curtidaBtn.classList.add('curtido');
-                if (!curtidasPorImagem[imagemAtual]) {
-                    curtidasPorImagem[imagemAtual] = 0; // Inicializa se não existir ainda
-                }
-                curtidasPorImagem[imagemAtual]++; // Aumenta as curtidas para a imagem atual
-            }
-
-            curtida = !curtida;
-            document.getElementById('coracao').innerText = curtida ? '❤️' : '🤍';
-            document.getElementById('curtidas').innerText = curtidasPorImagem[imagemAtual] || 0;
         }
 
         function updateLabel() {
