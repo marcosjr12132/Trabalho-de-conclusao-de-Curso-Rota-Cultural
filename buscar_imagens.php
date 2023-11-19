@@ -1,5 +1,5 @@
 <?php
-// ... Conexão com o banco de dados ...
+include('conexao.php'); 
 
 $sql = "SELECT nome_arquivo FROM imagens";
 $resultado = $conexao->query($sql);
