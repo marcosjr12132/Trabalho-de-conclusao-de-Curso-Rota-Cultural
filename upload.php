@@ -1,27 +1,37 @@
 <?php
-$baseURL = "https://seusite.com/uploads/";
+// Arquivo de configuração do banco de dados
+include('conexao.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagem"])) {
-    $conexao = new mysqli("seu_host", "seu_usuario", "sua_senha", "seu_banco_de_dados");
+// Diretório onde as imagens dos usuários serão armazenadas
+$uploadDirectory = 'processa_php/';
 
-    // Verifique a conexão
-    if ($conexao->connect_error) {
-        die("Conexão falhou: " . $conexao->connect_error);
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
+    $file = $_FILES['image'];
 
-    // Realize o upload da imagem
-    $nomeArquivo = basename($_FILES["imagem"]["name"]);
-    $caminhoArquivo = "uploads/" . $nomeArquivo; // Certifique-se de criar a pasta "uploads" no mesmo diretório do script PHP
-    move_uploaded_file($_FILES["imagem"]["tmp_name"], $caminhoArquivo);
+    // Verifica se o upload foi bem-sucedido
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        // Gera um nome único para o arquivo
+        $fileName = uniqid() . '_' . basename($file['name']);
+        $targetPath = $uploadDirectory . $fileName;
 
-    // Insira o nome do arquivo no banco de dados
-    $sql = "INSERT INTO imagens (nome_arquivo) VALUES ('$nomeArquivo')";
-    if ($conexao->query($sql) === TRUE) {
-        echo "O arquivo " . htmlspecialchars($nomeArquivo) . " foi enviado com sucesso.";
+        // Move o arquivo para o diretório de uploads
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            // Atualiza o caminho da imagem no banco de dados (substitua 'usuarios' pelo nome real da sua tabela)
+            $userId = $_SESSION['id'];
+            $updateSql = "UPDATE usuarios SET caminho_imagem = '$targetPath' WHERE id = $userId";
+            if ($conn->query($updateSql) === TRUE) {
+                // Retorna a URL da imagem para exibição na prévia
+                echo json_encode(['imageUrl' => $targetPath]);
+            } else {
+                echo json_encode(['error' => 'Erro ao atualizar o banco de dados']);
+            }
+        } else {
+            echo json_encode(['error' => 'Erro ao mover o arquivo para o diretório de uploads']);
+        }
     } else {
-        echo "Erro ao inserir no banco de dados: " . $conexao->error;
+        echo json_encode(['error' => 'Erro durante o upload do arquivo']);
     }
-
-    $conexao->close();
+} else {
+    echo json_encode(['error' => 'Requisição inválida']);
 }
 ?>
