@@ -1,74 +1,47 @@
 <?php
-// Inicializa a sessão
-session_start();
-require_once 'conexao.php';
-// Inclui o arquivo de configuração
-//Ksrequire_once 'config.php';
+// Conecte-se ao banco de dados
+include('conexao.php');
 
-// Define variáveis e inicializa com valores vazios
-$email = $senha = '';
-$email_err = $senha_err = '';
+// Valide o login
+if (isset($_POST["email"]) && isset($_POST["senha"])) {
+    $email = $_POST["email"];
+    $senhaInserida = $_POST["senha"];
 
-// Processa os dados do formulário quando o formulário é enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Verifica se o email está vazio
-    if (empty(trim($_POST['email']))) {
-        $email_err = 'Por favor, insira seu email.';
-    } else {
-        $email = trim($_POST['email']);
-    }
+    // Prepare a consulta SQL
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
 
-    // Verifica se a senha está vazia
-    if (empty(trim($_POST['senha']))) {
-        $senha_err = 'Por favor, insira sua senha.';
-    } else {
-        $senha = trim($_POST['senha']);
-    }
+    // Vincule os parâmetros da consulta
+    $stmt->bind_param("s", $email);
 
-    // Valida as credenciais
-    if (empty($email_err) && empty($senha_err)) {
-        $sql = 'SELECT id, email, password FROM users WHERE email = ?';
+    // Execute a consulta
+    $stmt->execute();
 
-        if ($stmt = $mysqli->prepare($sql)) {
-            $stmt->bind_param('s', $param_email);
-            $param_email = $email;
+    // Obtenha o resultado
+    $result = $stmt->get_result();
 
-            if ($stmt->execute()) {
-                $stmt->store_result();
+    // Verifique se o usuário existe
+    if ($result->num_rows > 0) {
+        $usuario = $result->fetch_assoc();
 
-                if ($stmt->num_rows == 1) {
-                    $stmt->bind_result($id, $email, $hashed_password);
-
-                    if ($stmt->fetch()) {
-                        if (password_verify($senha, $hashed_password)) {
-                            // A senha está correta, inicia uma nova sessão
-                            session_start();
-
-                            // Armazena dados em variáveis de sessão
-                            $_SESSION['id'] = $id;
-                            $_SESSION['email'] = $email;
-
-                            // Redireciona o usuário para a página de boas-vindas
-                            header('location: welcome.php');
-                        } else {
-                            // Exibe uma mensagem de erro se a senha não for válida
-                            $senha_err = 'Senha inválida.';
-                        }
-                    }
-                } else {
-                    // Exibe uma mensagem de erro se o email não existir
-                    $email_err = 'Nenhuma conta encontrada com esse email.';
-                }
-            } else {
-                echo 'Ops! Algo deu errado. Por favor, tente novamente mais tarde.';
-            }
-
-            // Fecha a declaração
-            $stmt->close();
+        // Verifique a senha
+        if ($senhaInserida === $usuario["senha"]) {
+            session_start();
+            $_SESSION["usuario"] = $usuario;
+            header("Location: usercadastrado.php");
+            exit(); // Adiciona esta linha para garantir que o script pare após redirecionar
+        } else {
+            // Senha inválida
+            echo "Senha inválida. Verifique a senha inserida.";
         }
+    } else {
+        // Usuário não existe
+        echo "Usuário não encontrado. Verifique o email inserido.";
     }
 
-    // Fecha a conexão
-    $mysqli->close();
+    // Feche a consulta
+    $stmt->close();
 }
+
+// Feche a conexão
+$conn->close();
 ?>
