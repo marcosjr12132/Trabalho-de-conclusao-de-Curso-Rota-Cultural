@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesta Cultural</title>
+    <style>
+        p {
+            text-align: center;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #FFB535;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px; /* Defina a altura desejada para o cabeçalho */
+        }
+
+        header h1 {
+            color: #f5f5f5;
+            margin: 0;
+        }
+
+        #logo {
+    max-width: 120px; /* Defina o tamanho máximo da sua logo */
+    margin-right: 20px; /* Adapte conforme necessário */
+}
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #BB7804;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        main h2 {
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .cta-buttons a {
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-buttons a.login {
+            background-color: #2ecc71;
+        }
+
+        .cta-buttons a.signup {
+            background-color: #3498db;
+        }
+
+        .cta-buttons a:hover {
+            background-color: #485460;
+        }
+
+        footer {
+            background-color: #FFB535;
+            color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Popup Styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        
+        .image-container {
+    text-align: center;
+    overflow: hidden; /* Evitar que a imagem ultrapasse os limites da página */
+    height: 50vh; /* 50% da altura da viewport */
+}
+
+.image-container img {
+    width: 100%;
+    height: 110%;
+    max-width: none; /* Remover a restrição máxima de largura */
+    border-radius: 8px; /* Opcional: Adicionar border-radius para cantos arredondados */
+    margin-top: 0; /* Remover a margem superior */
+}
+
+    .main-button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 25px;
+            background-color: #E40060; /* Cor do botão de inscrições */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .main-button:hover {
+            background-color: #AF024B; /* Cor no hover similar ao botão de inscrições */
+        }
+        
+         button.close-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #FFA813;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button.close-button:hover {
+            background-color: #BB7804;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .login-popup,
+        .registration-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        .close-popup-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+        }
+
+        /* Estilo semelhante ao fornecido para o formulário de login */
+.login-popup-content {
+    text-align: center;
+}
+
+.login-popup-content h2 {
+    color: #444;
+    text-align: center;
+}
+
+.login-popup-content p {
+    margin-bottom: 20px;
+}
+
+.login-popup-content form {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.login-popup-content label {
+    display: block;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.login-popup-content input[type="text"],
+.login-popup-content input[type="password"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.login-popup-content button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.login-popup-content button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#cadastroPopup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+#cadastroPopup .close-popup-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+#cadastroPopup .registration-popup-content {
+    text-align: center;
+}
+
+#cadastroPopup h2 {
+    color: #444;
+}
+
+#cadastroPopup label {
+    display: block;
+    margin-top: 10px;
+}
+
+#cadastroPopup input[type="text"],
+#cadastroPopup input[type="email"],
+#cadastroPopup input[type="tel"],
+#cadastroPopup input[type="password"],
+#cadastroPopup input[type="radio"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#cadastroPopup button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#cadastroPopup button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#inscricaoPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 3; /* Ajuste o índice z conforme necessário */
+        }
+
+        #inscricaoPopup .close-popup-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+        }
+
+        #inscricaoPopup h2 {
+            color: #444;
+            text-align: center;
+        }
+
+        #inscricaoPopup p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #inscricaoPopup form {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #inscricaoPopup label {
+            display: block;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        #inscricaoPopup input[type="text"],
+        #inscricaoPopup input[type="email"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #inscricaoPopup button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #inscricaoPopup button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #inscricaoPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="rtc.png" alt="Logo da Cesta Cultural" id="logo">
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showPopup()">Sobre</a></li>
+                <li><a href="paginadeimagens.php">Mural</a></li>
+                <li><a href="#" onclick="showLoginPopup()">Login</a></li>
+                <li><a href="#" onclick="showCadastroPopup()">Cadastro</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <p>Descubra novos horizontes e experiências, participe de um evento da Cesta Cultural!</p>
+        <div class="image-container">
+            <img src="telatcc.jpg" alt="Horizontal Image">
+        </div>
+        <!-- Adicione um ID ao botão para facilitar a seleção com JavaScript -->
+        <a href="#" class="main-button" id="participeAgoraBtn">Participe Agora</a>
+    </main>
+    <footer>
+        <p>&copy; 2022 - Cesta Cultural. Todos os direitos reservados.</p>
+    </footer>
+
+    <div class="overlay" onclick="hidePopup()"></div>
+    <div class="popup" id="popup">
+        <p>Bem-vindo à Rota Cultural: Sua Plataforma de Organização de Eventos Escolares no CEFET-MG!
+            Na Rota Cultural, acreditamos no poder transformador dos eventos escolares, e é por isso que criamos uma plataforma dedicada a simplificar e aprimorar a organização dessas experiências educativas. Seja você um educador, aluno ou membro da comunidade escolar, a Rota Cultural está aqui para ajudar a tornar seus eventos inesquecíveis.</p>
+        <button class="close-button" onclick="hidePopup()">Fechar</button>
+    </div>
+
+    <div class="overlay" onclick="closeLoginPopup(); closeCadastroPopup();"></div>
+
+    <div class="login-popup" id="loginPopup">
+        <button class="close-popup-button" onclick="closeLoginPopup()">&#x2716;</button>
+        <div class="login-popup-content">
+            <h2>Login</h2>
+            <p>Insira seus dados para fazer login:</p>
+            <form action="login.php" method="POST">
+                <label>E-mail</label><input type="text" name="email">
+                <label>Senha</label><input type="password" name="senha">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="registration-popup" id="cadastroPopup">
+        <button class="close-popup-button" onclick="closeCadastroPopup()">&#x2716;</button>
+        <div class="registration-popup-content">
+            <h2>Cadastro</h2>
+            <p>Insira seus dados para se cadastrar:</p>
+            <form action="processa.php" method="POST" onsubmit="return validateRegistrationForm()">
+                <label>Nome</label><input type="text" name="nome" required>
+                <label>E-mail</label><input type="email" name="email" required>
+                <label>Telefone</label><input type="tel" id="phone" name="phone" placeholder="Telefone" maxlength="15" pattern="\(\d{2}\) \d{4,5}-\d{4}" oninput="this.value = this.value.replace(/[^0-9() -]/g, '')" onkeypress="formatPhoneNumber(event)" required>
+                <label>Nova Senha</label><input type="password" id="password" name="senha" maxlength="10" placeholder="Nova senha" required>
+                <i class="password-icon fa fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                <label>Confirme a Senha</label><input type="password" id="confirm-password" name="confirm-password" maxlength="10" placeholder="Confirme a senha" required>
+                <i class="password-icon fa fa-eye" onclick="togglePasswordVisibility('confirm-password')"></i>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="overlay" onclick="closeInscricaoPopup()"></div>
+    <div class="popup" id="inscricaoPopup">
+        <button class="close-popup-button" onclick="closeInscricaoPopup()">&#x2716;</button>
+        <h2>Participe Agora</h2>
+        <p>Insira seus dados para se inscrever:</p>
+        <form action="inscricao.php" method="POST" onsubmit="return validateInscricaoForm()">
+            <label for="nomeCompleto"><b>Nome completo</b></label>
+            <input type="text" id="nomeCompleto" placeholder="Digite seu nome completo" name="nomeCompleto" required>
+            <br>
+            <label for="turma"><b>Turma</b></label>
+            <input type="text" id="turma" placeholder="Digite sua turma" name="turma" required>
+            <br>
+            <label for="apresentacao"><b>Apresentação</b></label>
+            <input type="text" id="apresentacao" placeholder="Digite qual será sua apresentação" name="apresentacao" required>
+            <br>
+            <label for="observacoes"><b>Observações</b></label>
+            <textarea id="observacoes" placeholder="Deixe sua observação para a apresentação, caso necessite" name="observacoes" rows="4" cols="50"></textarea>
+            <br>
+            <label for="email"><b>E-mail</b></label>
+            <input type="email" id="email" placeholder="Digite seu e-mail" name="email" required>
+            <br>
+            <button type="submit">Inscrever-se</button>
+        </form>
+    </div>
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        function showLoginPopup() {
+            document.getElementById('loginPopup').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function closeLoginPopup() {
+            document.getElementById('loginPopup').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        function showCadastroPopup() {
+            document.getElementById('cadastroPopup').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function closeCadastroPopup() {
+            document.getElementById('cadastroPopup').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+
+
+                // Adicione a função para mostrar o popup de inscrição
+        document.getElementById('participeAgoraBtn').addEventListener('click', function() {
+            document.getElementById('inscricaoPopup').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        });
+
+        // Adicione a função para fechar o popup de inscrição
+        function closeInscricaoPopup() {
+            document.getElementById('inscricaoPopup').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        // Adicione a função para validar o formulário de inscrição
+        function validateInscricaoForm() {
+            // Adicione suas lógicas de validação aqui, se necessário
+            return true; // Retorne true se o formulário for válido
+        }
+    </script>
+</body>
+</html>
+
+
+  <!--  <div class="registration-popup">
+        <button class="close-popup-button" onclick="closeRegistrationPopup()">&#x2716;</button>
+        <div class="registration-popup-content">
+            <h2>Cadastro</h2>
+            <p>Insira seus dados para se cadastrar:</p>
+            <form action="processa.php" method="POST" onsubmit="return validateRegistrationForm()">
+                <label>Nome</label><input type="text" name="nome" required>
+                <label>E-mail</label><input type="email" name="email" required>
+                <label>Telefone</label><input type="tel" id="phone" name="phone" placeholder="Telefone" maxlength="15" pattern="\(\d{2}\) \d{4,5}-\d{4}" oninput="this.value = this.value.replace(/[^0-9() -]/g, '')" onkeypress="formatPhoneNumber(event)" required>
+                <label>Nova Senha</label><input type="password" id="password" name="senha" maxlength="10" placeholder="Nova senha" required>
+                <i class="password-icon fa fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                <label>Confirme a Senha</label><input type="password" id="confirm-password" name="confirm-password" maxlength="10" placeholder="Confirme a senha" required>
+                <i class="password-icon fa fa-eye" onclick="togglePasswordVisibility('confirm-password')"></i>
+                <label>Tipo de Cadastro</label>
+                <input type="radio" name="tipo" value="editor" required> Cadastrar como Editor<br>
+                <input type="radio" name="tipo" value="visitante" required> Cadastrar como Visitante<br>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p>Já possui uma conta? <a onclick="switchToLoginPopup()">Faça login</a></p>
+        </div>
+    </div>
+    -->
+  <!--  <div class="login-popup">
+        <div class="login-popup-content">
+            <button class="close-popup-button" onclick="closeLoginPopup()">&#x2716;</button>
+            <h2>Login</h2>
+            <p>Insira seus dados para fazer login:</p>
+            <form action="login.php" method="POST">
+                <label>E-mail</label><input type="text" name="email">
+                <label>Senha</label><input type="password" name="senha">
+                <button type="submit">Login</button>
+            </form>
+            <p>Não possui uma conta? <a href="cadastro.php">Cadastrar-se</a></p>
+        </div>
+    </div>
+    -->
+   

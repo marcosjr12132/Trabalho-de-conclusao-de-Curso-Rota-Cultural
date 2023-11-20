@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrições</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #444;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.container {
+            width: 80%;
+            margin: 0 auto;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+     background-color: #0056b3;
+}
+
+.back-button {
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            background-color: #E40060;   
+        }
+
+        .back-button:hover {
+            background-color: #AF024B; 
+        }
+
+    </style>
+</head>
+<body>
+  
+        <nav>
+            <ul>
+                <li><a href="main.html" class="back-button">Voltar</a></li>
+            </ul>
+        </nav>
+   
+    
+    <div class="container">
+    <h1>Inscrições</h1>
+    <form action="main.html">
+        <label for="nomeCompleto"><b>Nome completo</b></label>
+        <input type="text" id="nomeCompleto" placeholder="Digite seu nome completo" name="nomeCompleto" required>
+        <br>
+        <label for="turma"><b>Turma</b></label>
+        <input type="text" id="turma" placeholder="Digite sua turma" name="turma" required>
+        <br>
+        <label for="apresentacao"><b>Apresentação</b></label>
+        <input type="text" id="apresentacao" placeholder="Digite qual irá ser sua apresentação" name="apresentacao" required>
+        <br>
+        <label for="observacoes"><b>Observações</b></label>
+        <textarea id="observacoes" placeholder="Deixe sua observação para a apresentação, caso necessite" name="observacoes" rows="4" cols="50"></textarea>
+        <br>
+        <button type="submit">Confirmar</button>
+    </form>
+    </div>
+</body>
+</html>
+
+
+
